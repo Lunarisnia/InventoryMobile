@@ -1,20 +1,28 @@
 import { useSession } from '@/components/AuthContext';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { Button, Dimensions, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Button, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 // TODO: Create a proper login page with text input for NIS and password
 export default function SignIn() {
   const { signIn } = useSession();
-  const [nis, setNis] = useState("123123");
-  const [password, setPassword] = useState("fpppfppfpf");
+  const [nis, setNis] = useState("");
+  const [password, setPassword] = useState("");
+  const [finished, setFinished] = useState(false);
+  useEffect(() => {
+    if (finished) {
+      router.replace('/');
+      setFinished(false);
+    }
+  }, [finished]);
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Inventory Manager</Text>
       <TextInput
         style={styles.input}
         onChangeText={setNis}
+        placeholder="NIS"
         value={nis}
       />
       <TextInput
@@ -22,12 +30,13 @@ export default function SignIn() {
         secureTextEntry={true}
         style={styles.input}
         onChangeText={setPassword}
+        placeholder="Password"
         value={password}
       />
       <Button title="Login"
-        onPress={() => {
-          signIn();
-          router.replace('/');
+        onPress={async () => {
+          await signIn(nis, password);
+          setFinished(true);
         }} />
     </View>
   );

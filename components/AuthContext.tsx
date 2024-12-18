@@ -1,15 +1,16 @@
+import { login } from "@/internal/authorization/login";
 import { useStorageState } from "@/internal/storage/usesStorageState";
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 
 interface AuthInfo {
-  signIn: () => void;
+  signIn: (nis: string, password: string) => Promise<void>;
   signOut: () => void;
   session: string | null;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthInfo>({
-  signIn: () => null,
+  signIn: async () => { },
   signOut: () => null,
   session: null,
   isLoading: false,
@@ -26,9 +27,11 @@ export function SessionProvider({ children }: PropsWithChildren) {
   return <AuthContext.Provider
     value={{
       // TODO: add param for nis and password
-      signIn: () => {
+      signIn: async (nis: string, password: string) => {
         // actual login logic goes here
-        setSession("token-from-api-goes-here");
+        const loginResponse = await login(nis, password);
+        setSession(loginResponse.token);
+        //setSession("token-from-api-goes-here");
       },
       signOut: () => {
         // call the logout api here
