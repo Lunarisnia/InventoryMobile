@@ -1,65 +1,58 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, VirtualizedList } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSession } from '@/components/AuthContext';
 
+const getItem = (index: number) => {
+  return {
+    id: Math.random().toString(12).substring(0),
+    title: `Item ${index + 1}`
+  }
+}
+
+function BorrowCard({ title, borrowDate, source }: any) {
+  return (
+    <ThemedView style={styles.borrowListCard}>
+      <Image source={{ uri: source }} style={styles.borrowListImage} />
+      <ThemedView style={styles.borrowListInformation}>
+        <ThemedText style={styles.borrowCardTitle} numberOfLines={3}>
+          {title}
+        </ThemedText>
+        <ThemedText style={{ flex: 1 }}>
+          Dipinjam: {borrowDate}
+        </ThemedText>
+      </ThemedView>
+    </ThemedView>
+  )
+}
+
 export default function HomeScreen() {
   const { signOut } = useSession();
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" onPress={() => {
-          signOut();
-        }}>
-          Step 4: Logout
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <VirtualizedList
+      initialNumToRender={4}
+      renderItem={(item) => <BorrowCard source={"https://dummyimage.com/40x40/000/fff"} title={"Sapu"} borrowDate={new Date().toDateString()} />}
+      keyExtractor={item => item.id}
+      getItemCount={() => 10}
+      getItem={getItem}
+    />
+    //<ParallaxScrollView
+    //  headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+    //  headerImage={
+    //    <ThemedView style={styles.reactLogo}>
+    //      <ThemedText type="title">Inventory Manager</ThemedText>
+    //    </ThemedView>
+    //  }>
+    //  <ThemedView style={styles.stepContainer}>
+    //    <ThemedText type="subtitle" onPress={() => {
+    //      signOut();
+    //    }}>
+    //      Step 4: Logout
+    //    </ThemedText>
+    //  </ThemedView>
+    //</ParallaxScrollView>
   );
 }
 
@@ -74,10 +67,33 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+    //height: 178,
+    //width: 290,
+    bottom: 170,
+    left: 10,
     position: 'absolute',
   },
-});
+  borrowListCard: {
+    borderWidth: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    borderRadius: 10,
+    margin: 10,
+    flexDirection: "row"
+  },
+  borrowListImage: {
+    width: 70,
+    height: 70,
+  },
+  borrowCardTitle: {
+    overflow: 'hidden',
+    paddingTop: 10,
+    fontSize: 30,
+    fontWeight: 'bold',
+    flex: 1,
+  },
+  borrowListInformation: {
+    marginLeft: 10,
+  },
+})

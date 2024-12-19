@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Button, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
-// TODO: Create a proper login page with text input for NIS and password
 export default function SignIn() {
   const { signIn } = useSession();
   const [nis, setNis] = useState("");
