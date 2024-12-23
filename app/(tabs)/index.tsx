@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, VirtualizedList } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSession } from '@/components/AuthContext';
-import { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import getBorrowList, { GetBorrowListResponse } from '@/internal/inventory/getBorrowList';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -32,6 +32,22 @@ function BorrowCard({ title, borrowDate, source }: any) {
   )
 }
 
+//  https://dummyimage.com/600x400/000/fff
+function HomeBannerCard() {
+  const bannerHeight = 350;
+  return (
+    <ThemedView style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Image source={{ uri: "https://dummyimage.com/600x400/000/fff" }} style={{
+        width: bannerHeight,
+        height: bannerHeight / (16 / 9),
+        borderRadius: 10,
+        marginTop: 20,
+        marginBottom: 20,
+      }} />
+    </ThemedView>
+  );
+}
+
 export default function HomeScreen() {
   const { signOut, session } = useSession();
   const [borrowList, setBorrowList] = useState([] as Array<GetBorrowListResponse>);
@@ -47,16 +63,21 @@ export default function HomeScreen() {
     return borrowList[index];
   };
 
-  const renderFooter = () => {
+  const renderHeader = () => {
     return (
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle" onPress={() => {
-          signOut();
-        }}>
-          Step 4: Logout
-        </ThemedText>
-      </ThemedView>
+      <React.Fragment>
+        <HomeBannerCard />
+      </React.Fragment>
     )
+  }
+  const renderFooter = () => {
+    return <ThemedView style={styles.stepContainer}>
+      <ThemedText type="subtitle" onPress={() => {
+        signOut();
+      }} style={{ height: 500, }}>
+        Step 4: Logout
+      </ThemedText>
+    </ThemedView>
   }
 
   // TODO: I need the proper header with greeting
@@ -73,24 +94,10 @@ export default function HomeScreen() {
         keyExtractor={(item) => String(item.id)}
         getItemCount={() => borrowList.length}
         getItem={getItem}
-        ListHeaderComponent={renderFooter}
+        ListHeaderComponent={renderHeader}
+        ListFooterComponent={renderFooter}
       />
     </SafeAreaView>
-    //<ParallaxScrollView
-    //  headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-    //  headerImage={
-    //    <ThemedView style={styles.reactLogo}>
-    //      <ThemedText type="title">Inventory Manager</ThemedText>
-    //    </ThemedView>
-    //  }>
-    //  <ThemedView style={styles.stepContainer}>
-    //    <ThemedText type="subtitle" onPress={() => {
-    //      signOut();
-    //    }}>
-    //      Step 4: Logout
-    //    </ThemedText>
-    //  </ThemedView>
-    //</ParallaxScrollView>
   );
 }
 
@@ -123,6 +130,7 @@ const styles = StyleSheet.create({
   borrowListImage: {
     width: 70,
     height: 70,
+    borderRadius: 10,
   },
   borrowCardTitle: {
     overflow: 'hidden',
@@ -133,5 +141,8 @@ const styles = StyleSheet.create({
   },
   borrowListInformation: {
     marginLeft: 10,
+  },
+  cardBorder: {
+    borderWidth: 1,
   },
 })

@@ -8,6 +8,7 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSession } from '@/components/AuthContext';
+import { ThemedView } from '@/components/ThemedView';
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
@@ -40,20 +41,39 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => {
+            return <IconSymbol size={28} name="house.fill" color={color} />;
+          },
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="scan"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          //title: 'Pinjam/Kembalikan',
+          title: "",
+          tabBarIcon: ({ color }) => {
+            return <ThemedView style={{
+              width: 80,
+              height: 80,
+              borderWidth: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 100,
+              marginBottom: 25,
+            }}>
+              <IconSymbol size={80} name="camera.circle" color={color} />
+            </ThemedView>
+          },
         }}
       />
       <Tabs.Screen
-        name="details" options={{
-          title: "Details",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => {
+            return <IconSymbol size={28} name="person.fill" color={color} />;
+          },
         }}
       />
     </Tabs>
