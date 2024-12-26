@@ -125,7 +125,13 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 10,
     margin: 10,
-    flexDirection: "row"
+    flexDirection: "row",
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
   },
   borrowListImage: {
     width: 70,
