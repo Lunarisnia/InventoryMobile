@@ -1,20 +1,11 @@
-import { Image, StyleSheet, Text, VirtualizedList } from 'react-native';
+import { Image, StyleSheet, VirtualizedList } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSession } from '@/components/AuthContext';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import getBorrowList, { GetBorrowListResponse } from '@/internal/inventory/getBorrowList';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-//const getItem = (index: number) => {
-//  return {
-//    id: Math.random().toString(12).substring(0),
-//    title: `Item ${index + 1}`
-//  }
-//}
-
 
 function BorrowCard({ title, borrowDate, source }: any) {
   return (
