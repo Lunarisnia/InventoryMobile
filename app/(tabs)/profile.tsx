@@ -4,7 +4,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import getUserInfo, { UserInfo } from "@/internal/users/getUserInfo";
 import { useEffect, useState } from "react";
-import { Image, Pressable, SafeAreaView, StyleSheet } from "react-native";
+import { Dimensions, Image, Pressable, SafeAreaView, StyleSheet } from "react-native";
 
 const ProfilePicture = ({ personName }: any) => {
   return (
@@ -67,8 +67,9 @@ const ProfileButton = () => {
   )
 }
 
-// TODO: Get person name
 // TODO: Set Picture
+// TODO: Set Picture in login Page, Homepage
+// TODO: Start on scan to borrow page
 export default function Profile() {
   const [personName, setPersonName] = useState("");
   const { session } = useSession();
@@ -91,8 +92,12 @@ export default function Profile() {
   }
   return (
     <SafeAreaView>
-      <Header />
-      <ProfileButton />
+      <ThemedView style={{
+        height: Dimensions.get("screen").height,
+      }}>
+        <Header />
+        <ProfileButton />
+      </ThemedView>
     </SafeAreaView>
   )
 }

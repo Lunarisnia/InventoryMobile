@@ -1,4 +1,4 @@
-import { Image, StyleSheet, VirtualizedList } from 'react-native';
+import { Dimensions, Image, StyleSheet, VirtualizedList } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -58,6 +58,15 @@ export default function HomeScreen() {
     return (
       <React.Fragment>
         <HomeBannerCard />
+        <ThemedView>
+          <ThemedText style={{
+            paddingLeft: 10,
+            paddingTop: 20,
+            paddingBottom: 10,
+            borderBottomWidth: 1,
+            fontSize: 30,
+          }}>Active Borrow List</ThemedText>
+        </ThemedView>
       </React.Fragment>
     )
   }
@@ -66,23 +75,24 @@ export default function HomeScreen() {
     </ThemedView>
   }
 
-  // TODO: I need the proper header with greeting
   return (
     <SafeAreaView>
-      <VirtualizedList
-        initialNumToRender={4}
-        renderItem={(item) => {
-          const d = new Date(0);
-          d.setUTCSeconds(item.item.borrow_at);
-          return <BorrowCard source={"https://dummyimage.com/40x40/000/fff"} title={item.item.name}
-            borrowDate={d.toDateString()} />
-        }}
-        keyExtractor={(item) => String(item.id)}
-        getItemCount={() => borrowList.length}
-        getItem={getItem}
-        ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
-      />
+      <ThemedView style={{ height: Dimensions.get("screen").height, }}>
+        <VirtualizedList
+          initialNumToRender={4}
+          renderItem={(item) => {
+            const d = new Date(0);
+            d.setUTCSeconds(item.item.borrow_at);
+            return <BorrowCard source={"https://dummyimage.com/40x40/000/fff"} title={item.item.name}
+              borrowDate={d.toDateString()} />
+          }}
+          keyExtractor={(item) => String(item.id)}
+          getItemCount={() => borrowList.length}
+          getItem={getItem}
+          ListHeaderComponent={renderHeader}
+          ListFooterComponent={renderFooter}
+        />
+      </ThemedView>
     </SafeAreaView>
   );
 }
@@ -96,7 +106,6 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
-    height: 50,
   },
   reactLogo: {
     //height: 178,

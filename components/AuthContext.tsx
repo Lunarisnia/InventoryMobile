@@ -26,7 +26,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
   return <AuthContext.Provider
     value={{
-      // TODO: add param for nis and password
       signIn: async (nis: string, password: string) => {
         // actual login logic goes here
         const loginResponse = await login(nis, password);
