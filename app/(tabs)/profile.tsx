@@ -2,8 +2,9 @@ import { useSession } from "@/components/AuthContext";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { useState } from "react";
-import { Button, Image, Pressable, SafeAreaView, StyleSheet } from "react-native";
+import getUserInfo, { UserInfo } from "@/internal/users/getUserInfo";
+import { useEffect, useState } from "react";
+import { Image, Pressable, SafeAreaView, StyleSheet } from "react-native";
 
 const ProfilePicture = ({ personName }: any) => {
   return (
@@ -58,7 +59,9 @@ const ProfileButton = () => {
             paddingTop: 12,
             fontSize: 30,
             fontWeight: "bold"
-          }}>Logout</ThemedText>
+          }}>
+          Logout
+        </ThemedText>
       </ThemedView>
     </Pressable>
   )
@@ -67,10 +70,22 @@ const ProfileButton = () => {
 // TODO: Get person name
 // TODO: Set Picture
 export default function Profile() {
+  const [personName, setPersonName] = useState("");
+  const { session } = useSession();
+
+  useEffect(() => {
+    async function run() {
+      const userInfo: UserInfo = await getUserInfo(session || "")
+      setPersonName(userInfo.name);
+    }
+    run()
+  }, [personName])
+
+
   const Header = () => {
     return (
       <ThemedView style={styles.header}>
-        <ProfilePicture personName={"Jane Doe"} />
+        <ProfilePicture personName={personName} />
       </ThemedView >
     )
   }

@@ -72,11 +72,6 @@ export default function HomeScreen() {
   }
   const renderFooter = () => {
     return <ThemedView style={styles.stepContainer}>
-      <ThemedText type="subtitle" onPress={() => {
-        signOut();
-      }} style={{ height: 500, }}>
-        Step 4: Logout
-      </ThemedText>
     </ThemedView>
   }
 
@@ -110,6 +105,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
+    height: 50,
   },
   reactLogo: {
     //height: 178,
