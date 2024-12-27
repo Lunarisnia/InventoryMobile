@@ -3,9 +3,10 @@ import { Dimensions, Image, StyleSheet, VirtualizedList } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useSession } from '@/components/AuthContext';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import getBorrowList, { GetBorrowListResponse } from '@/internal/inventory/getBorrowList';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from 'expo-router';
 
 function BorrowCard({ title, borrowDate, source }: any) {
   return (
@@ -42,13 +43,18 @@ function HomeBannerCard() {
 export default function HomeScreen() {
   const { signOut, session } = useSession();
   const [borrowList, setBorrowList] = useState([] as Array<GetBorrowListResponse>);
-  useEffect(() => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(useCallback(() => {
     async function call() {
       const borrowListResponse = await getBorrowList(session!);
       setBorrowList(borrowListResponse);
     }
     call();
-  }, []);
+    return () => {
+    }
+  }, [])
+  )
 
   const getItem = (data: any, index: number) => {
     return borrowList[index];
@@ -72,6 +78,7 @@ export default function HomeScreen() {
   }
   const renderFooter = () => {
     return <ThemedView style={styles.stepContainer}>
+      <ThemedText>Mohon kembalikan barang barang yang telah anda pinjam</ThemedText>
     </ThemedView>
   }
 
@@ -79,11 +86,18 @@ export default function HomeScreen() {
     <SafeAreaView>
       <ThemedView style={{ height: Dimensions.get("screen").height, }}>
         <VirtualizedList
+          refreshing={refreshing}
+          onRefresh={async () => {
+            setRefreshing(true);
+            const borrowListResponse = await getBorrowList(session!);
+            setBorrowList(borrowListResponse);
+            setRefreshing(false);
+          }}
           initialNumToRender={4}
           renderItem={(item) => {
             const d = new Date(0);
             d.setUTCSeconds(item.item.borrow_at);
-            return <BorrowCard source={"https://dummyimage.com/40x40/000/fff"} title={item.item.name}
+            return <BorrowCard source={item.item.image} title={item.item.name}
               borrowDate={d.toDateString()} />
           }}
           keyExtractor={(item) => String(item.id)}
@@ -106,6 +120,7 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
+    height: 100,
   },
   reactLogo: {
     //height: 178,

@@ -9,6 +9,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useSession } from '@/components/AuthContext';
 import { ThemedView } from '@/components/ThemedView';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
@@ -36,6 +37,7 @@ export default function TabLayout() {
           },
           default: {},
         }),
+        popToTopOnBlur: true,
       }}>
       <Tabs.Screen
         name="index"
@@ -62,7 +64,7 @@ export default function TabLayout() {
               borderRadius: 100,
               marginBottom: 25,
             }}>
-              <IconSymbol size={80} name="camera.circle" color={color} />
+              <MaterialIcons name="camera" size={80} color="black" />
             </ThemedView>
           },
         }}
@@ -72,10 +74,12 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => {
-            return <IconSymbol size={28} name="person.fill" color={color} />;
+            return <MaterialIcons name="person" size={28} color={color} />
           },
         }}
       />
     </Tabs>
   );
 }
+
+//<IconSymbol size={80} name="camera.circle" color={color} />
